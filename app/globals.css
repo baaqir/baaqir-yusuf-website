@@ -1,26 +1,253 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #f6efe2;
+  --paper-warm: #efe6d4;
+  --ink: #1b1813;
+  --muted: #6b6258;
+  --rule: #d9ceb9;
+  --accent: #2a4a6b;
+  --accent-soft: #bfd0e0;
+  --gold: #bfa460;
+  --highlight: #dfe8f1;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.dark {
+  --paper: #14120f;
+  --paper-warm: #1a1713;
+  --ink: #ece4d3;
+  --muted: #9a9184;
+  --rule: #2c2823;
+  --accent: #7fa6cb;
+  --accent-soft: #1e2e45;
+  --gold: #cbae78;
+  --highlight: #1c2a3e;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  html:not(.light) {
+    --paper: #14120f;
+    --paper-warm: #1a1713;
+    --ink: #ece4d3;
+    --muted: #9a9184;
+    --rule: #2c2823;
+    --accent: #7fa6cb;
+    --accent-soft: #1e2e45;
+    --gold: #cbae78;
+    --highlight: #1c2a3e;
   }
 }
 
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-warm: var(--paper-warm);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-gold: var(--gold);
+  --color-highlight: var(--highlight);
+  --font-display: var(--font-fraunces);
+  --font-serif: var(--font-newsreader);
+  --font-mono: var(--font-jetbrains);
+  --font-sans: var(--font-newsreader);
+}
+
+html {
+  color-scheme: light dark;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  font-feature-settings: "ss01", "ss02", "liga", "kern";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--paper);
+}
+
+/* Paper texture — a radial grain that layers both themes. */
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  mix-blend-mode: multiply;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.7 0'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>");
+  background-size: 300px 300px;
+}
+
+.dark .grain {
+  mix-blend-mode: screen;
+  opacity: 0.05;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not(.light) .grain {
+    mix-blend-mode: screen;
+    opacity: 0.05;
+  }
+}
+
+.paper-surface {
+  background: var(--paper);
+}
+
+/* Soft rule used between sections */
+.hr-rule {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--rule) 10%, var(--rule) 90%, transparent);
+}
+
+/* Drop cap for the first paragraph of About */
+.dropcap::first-letter {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-weight: 400;
+  font-size: 4.25em;
+  line-height: 0.9;
+  float: left;
+  padding: 0.15em 0.12em 0 0;
+  color: var(--accent);
+  font-feature-settings: "ss01";
+}
+
+/* Link underline ink-style */
+.ink-link {
+  background-image: linear-gradient(to right, var(--accent), var(--accent));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  transition: background-size 350ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  padding-bottom: 1px;
+}
+
+.ink-link:hover {
+  background-size: 100% 3px;
+}
+
+/* Small-caps metadata style used for dates, project slugs */
+.smallcaps {
+  font-family: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Accessible focus ring */
+:where(a, button, [role="button"], input, textarea):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Essay typography — used on /writing/[slug] */
+.prose-essay > * + * {
+  margin-top: 1.25em;
+}
+.prose-essay p {
+  max-width: 62ch;
+}
+.prose-essay h2 {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: 1.75rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin-top: 2em;
+}
+.prose-essay h3 {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: 1.35rem;
+  line-height: 1.25;
+  margin-top: 1.5em;
+}
+.prose-essay a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.prose-essay em {
+  font-style: italic;
+}
+.prose-essay strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+.prose-essay blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: 1.1em;
+  font-style: italic;
+  color: var(--ink);
+  opacity: 0.9;
+}
+.prose-essay ul,
+.prose-essay ol {
+  padding-left: 1.25em;
+}
+.prose-essay ul {
+  list-style: none;
+}
+.prose-essay ul > li {
+  position: relative;
+  padding-left: 1.1em;
+}
+.prose-essay ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.85em;
+  width: 0.55em;
+  height: 1px;
+  background: var(--accent);
+}
+.prose-essay ol {
+  list-style: decimal;
+}
+.prose-essay code {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.92em;
+  background: color-mix(in oklab, var(--gold) 18%, transparent);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+.prose-essay pre {
+  background: var(--paper-warm);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 1em 1.25em;
+  overflow-x: auto;
+  font-size: 0.92em;
+}
+.prose-essay pre code {
+  background: none;
+  padding: 0;
+}
+.prose-essay hr {
+  border: 0;
+  height: 1px;
+  background: var(--rule);
+  margin: 2.5em auto;
+  width: 30%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
