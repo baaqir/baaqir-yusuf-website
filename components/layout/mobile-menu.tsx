@@ -23,6 +23,7 @@ const sections = [
       { label: "Music", href: "/music" },
       { label: "Movies", href: "/movies" },
       { label: "Food", href: "/food" },
+      { label: "Reads", href: "/reads" },
     ],
   },
 ];
