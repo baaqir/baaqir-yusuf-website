@@ -20,7 +20,7 @@ export const profile = {
   marginalia: [
     { label: "Reading", value: "Iron Gold — Pierce Brown" },
     { label: "Bad at", value: "Patience" },
-    { label: "Next trip", value: "Pakistan" },
+    { label: "Alma mater", value: "UNC Chapel Hill" },
     { label: "Based in", value: "New York, NY" },
   ],
   quotes: [
