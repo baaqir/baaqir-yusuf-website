@@ -25,6 +25,7 @@ export function USStatesMap() {
   const [hovered, setHovered] = useState<string | null>(null);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1);
+  const [containerWidth, setContainerWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const gRef = useRef<SVGGElement>(null);
@@ -41,6 +42,15 @@ export function USStatesMap() {
     return () => {
       cancelled = true;
     };
+  }, []);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    setContainerWidth(el.clientWidth);
+    const ro = new ResizeObserver(() => setContainerWidth(el.clientWidth));
+    ro.observe(el);
+    return () => ro.disconnect();
   }, []);
 
   useEffect(() => {
@@ -168,7 +178,7 @@ export function USStatesMap() {
         <div
           className="pointer-events-none absolute z-10 max-w-[14rem] rounded-md border border-[color:var(--rule)] bg-[color:var(--paper)] px-3 py-2 shadow-sm"
           style={{
-            left: Math.min(tooltipPos.x + 14, (containerRef.current?.clientWidth ?? 0) - 240),
+            left: Math.min(tooltipPos.x + 14, Math.max(0, containerWidth - 240)),
             top: Math.max(0, tooltipPos.y - 8),
           }}
         >

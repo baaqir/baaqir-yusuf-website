@@ -10,7 +10,7 @@ export function Projects() {
         <Reveal>
           <div className="flex items-baseline justify-between">
             <h2 className="font-display text-4xl tracking-[-0.01em] md:text-5xl">Projects</h2>
-            <span className="smallcaps hidden md:inline">Things I've built</span>
+            <span className="smallcaps hidden md:inline">Things I&apos;ve built</span>
           </div>
           <p className="mt-5 max-w-2xl font-serif text-lg italic text-ink/75 md:text-xl">
             I really enjoy building things from zero. Each of these started as a question I

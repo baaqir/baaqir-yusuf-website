@@ -54,7 +54,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const stored = readCookie();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setThemeState(stored);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setResolvedTheme(stored === "system" ? getSystemTheme() : stored);
   }, []);
 

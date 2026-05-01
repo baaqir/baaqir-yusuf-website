@@ -31,6 +31,7 @@ export function WorldMap() {
   const [hovered, setHovered] = useState<string | null>(null);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1);
+  const [containerWidth, setContainerWidth] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const gRef = useRef<SVGGElement>(null);
@@ -47,6 +48,15 @@ export function WorldMap() {
     return () => {
       cancelled = true;
     };
+  }, []);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    setContainerWidth(el.clientWidth);
+    const ro = new ResizeObserver(() => setContainerWidth(el.clientWidth));
+    ro.observe(el);
+    return () => ro.disconnect();
   }, []);
 
   useEffect(() => {
@@ -107,14 +117,40 @@ export function WorldMap() {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const fc = feature(topology as any, topology.objects.countries as any) as unknown as {
+  const fcRaw = feature(topology as any, topology.objects.countries as any) as unknown as {
     type: "FeatureCollection";
     features: Array<{
       type: "Feature";
       properties: CountryFeatureProps;
-      geometry: unknown;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      geometry: any;
       id?: string;
     }>;
+  };
+
+  // Filter out overseas-territory polygons that misrepresent visited countries.
+  // (e.g. France's source geometry includes French Guiana in South America.)
+  const fc = {
+    ...fcRaw,
+    features: fcRaw.features.map((f) => {
+      if (
+        f.properties?.name === "France" &&
+        f.geometry?.type === "MultiPolygon"
+      ) {
+        const europeOnly = (f.geometry.coordinates as number[][][][]).filter(
+          (polygon) => {
+            const lats = polygon[0].map((pt) => pt[1]);
+            const centerLat = (Math.min(...lats) + Math.max(...lats)) / 2;
+            return centerLat > 30;
+          },
+        );
+        return {
+          ...f,
+          geometry: { ...f.geometry, coordinates: europeOnly },
+        };
+      }
+      return f;
+    }),
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -174,7 +210,7 @@ export function WorldMap() {
         <div
           className="pointer-events-none absolute z-10 max-w-[14rem] rounded-md border border-[color:var(--rule)] bg-[color:var(--paper)] px-3 py-2 shadow-sm"
           style={{
-            left: Math.min(tooltipPos.x + 14, (containerRef.current?.clientWidth ?? 0) - 240),
+            left: Math.min(tooltipPos.x + 14, Math.max(0, containerWidth - 240)),
             top: Math.max(0, tooltipPos.y - 8),
           }}
         >

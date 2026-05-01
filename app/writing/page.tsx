@@ -21,7 +21,7 @@ export default function WritingIndex() {
             Writing<span className="text-accent">.</span>
           </h1>
           <p className="mt-6 max-w-xl font-serif text-xl text-ink/80">
-            Short pieces on building, selling, and the craft of running a company.
+            A few things I&rsquo;ve felt compelled to write down. Some personal, some what I&rsquo;ve taken away from the corners of business I&rsquo;ve been lucky to work in.
           </p>
         </Reveal>
 

@@ -19,11 +19,27 @@ export const profile = {
   ],
   marginalia: [
     { label: "Reading", value: "Iron Gold — Pierce Brown" },
-    { label: "Training for", value: "damage control" },
+    { label: "Bad at", value: "Patience" },
     { label: "Next trip", value: "Pakistan" },
     { label: "Based in", value: "New York, NY" },
   ],
   quotes: [
+    {
+      text: "Mozart, Beethoven and Chopin never died, they simply became music.",
+      author: "Dr. Robert Ford",
+    },
+    {
+      text: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+      author: "Winston Churchill",
+    },
+    {
+      text: "The way to get started is to quit talking and begin doing.",
+      author: "Walt Disney",
+    },
+    {
+      text: "There is no greater agony than bearing an untold story inside you.",
+      author: "Maya Angelou",
+    },
     {
       text: "Everything we shut our eyes to, everything we run away from, everything we deny, denigrate or despise, serves to defeat us in the end.",
       author: "James Baldwin",
@@ -31,14 +47,6 @@ export const profile = {
     {
       text: "Everyone thinks of changing the world, but no one thinks of changing himself.",
       author: "Leo Tolstoy",
-    },
-    {
-      text: "There is no greater agony than bearing an untold story inside you.",
-      author: "Maya Angelou",
-    },
-    {
-      text: "What you seek is seeking you.",
-      author: "Rumi",
     },
   ],
   email: "baaqir@stainless.com",
